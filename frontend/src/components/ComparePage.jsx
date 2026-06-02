@@ -15,37 +15,50 @@ const categories = [
   { key: 'tov', label: 'TOV' },
 ]
 
-function PlayerSelect({ label, player, onSelect, query, setQuery, results, onSearch }) {
+function PlayerSelect({ label, player, onSelect, query, setQuery, results, onSearch, setter }) {
   return (
-    <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-5">
+    <div className="relative rounded-3xl border border-slate-800 bg-slate-900/90 p-5">
       <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">{label}</h2>
-      <input
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search player"
-        className="mt-4 w-full rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-white outline-none"
-      />
-      <button onClick={onSearch} className="mt-3 w-full rounded-2xl bg-cyan-400 px-4 py-3 font-semibold text-slate-950">
-        Search
-      </button>
+      <div className="mt-4 relative">
+        <div className="flex gap-3">
+          <input
+            value={query}
+            onChange={(e) => {
+              const value = e.target.value
+              setQuery(value)
+              if (value.trim().length >= 2) {
+                onSearch(value)
+              } else {
+                setter([])
+              }
+            }}
+            placeholder="Search player"
+            className="flex-1 rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-white outline-none"
+          />
+          <button onClick={() => onSearch(query)} className="rounded-2xl bg-cyan-400 px-4 py-3 font-semibold text-slate-950">
+            Search
+          </button>
+        </div>
+        {results.length > 0 && (
+          <div className="absolute left-0 right-0 top-full z-20 mt-2 max-h-72 overflow-auto rounded-3xl border border-slate-700 bg-slate-950/95 shadow-2xl">
+            {results.slice(0, 5).map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => onSelect(item)}
+                className="w-full text-left px-4 py-3 text-slate-100 transition hover:bg-slate-900"
+              >
+                <div className="font-semibold">{item.full_name}</div>
+                <div className="text-xs text-slate-500">{item.team_name || 'Unknown team'}</div>
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
       {player && (
         <div className="mt-4 rounded-3xl bg-slate-950/80 p-4 text-white">
           <div className="text-lg font-semibold">{player.full_name}</div>
           <div className="mt-1 text-sm text-slate-400">{player.team_name || 'Free agent'}</div>
-        </div>
-      )}
-      {results.length > 0 && (
-        <div className="mt-4 space-y-2">
-          {results.slice(0, 5).map((item) => (
-            <button
-              key={item.id}
-              onClick={() => onSelect(item)}
-              className="w-full rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-left text-slate-100 transition hover:border-cyan-400"
-            >
-              {item.full_name}
-              <div className="text-xs text-slate-500">{item.team_name || 'Unknown team'}</div>
-            </button>
-          ))}
         </div>
       )}
     </div>
@@ -64,7 +77,10 @@ export default function ComparePage() {
   const [error, setError] = useState('')
 
   const handleSearch = async (query, setter) => {
-    if (!query.trim()) return
+    if (!query.trim()) {
+      setter([])
+      return
+    }
     try {
       const data = await searchPlayers(query)
       setter(data.results)
@@ -106,7 +122,8 @@ export default function ComparePage() {
           query={query1}
           setQuery={setQuery1}
           results={results1}
-          onSearch={() => handleSearch(query1, setResults1)}
+          setter={setResults1}
+          onSearch={(value) => handleSearch(value, setResults1)}
           onSelect={(player) => {
             setPlayer1(player)
             setResults1([])
@@ -118,7 +135,8 @@ export default function ComparePage() {
           query={query2}
           setQuery={setQuery2}
           results={results2}
-          onSearch={() => handleSearch(query2, setResults2)}
+          setter={setResults2}
+          onSearch={(value) => handleSearch(value, setResults2)}
           onSelect={(player) => {
             setPlayer2(player)
             setResults2([])

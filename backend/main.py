@@ -1,6 +1,7 @@
 import json
 import os
 import time
+import unicodedata
 from functools import lru_cache
 from typing import Any, Dict, List, Optional
 
@@ -80,6 +81,13 @@ def find_player(player_id: int) -> Dict[str, Any]:
     raise HTTPException(status_code=404, detail="Player not found")
 
 
+def normalize_text(value: Optional[str]) -> str:
+    if not value:
+        return ""
+    normalized = unicodedata.normalize("NFKD", value)
+    return "".join(ch for ch in normalized if not unicodedata.combining(ch)).lower()
+
+
 def resolve_team_name(player: Dict[str, Any]) -> Optional[str]:
     return player.get("team_name") or player.get("team_abbreviation")
 
@@ -154,10 +162,10 @@ def build_season_stats(player_id: int) -> Dict[str, Any]:
 
 @app.get("/players/search")
 def search_players(name: str = Query(..., min_length=1, description="Search by player name")):
-    query = name.strip().lower()
+    query_norm = normalize_text(name.strip())
     results = []
     for player in get_player_list():
-        if query not in player["full_name"].lower():
+        if query_norm not in normalize_text(player["full_name"]):
             continue
         team_name = None
         position = None

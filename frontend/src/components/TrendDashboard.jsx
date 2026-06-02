@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend, CartesianGrid } from 'recharts'
 import { searchPlayers, getPlayerStats } from '../api'
 
@@ -18,6 +18,21 @@ export default function TrendDashboard() {
     } catch (err) {
       setResults([])
       setError(err.message)
+    }
+  }
+
+  const handleQueryChange = async (value) => {
+    setQuery(value)
+    if (!value.trim() || value.trim().length < 2) {
+      setResults([])
+      return
+    }
+
+    try {
+      const data = await searchPlayers(value)
+      setResults(data.results)
+    } catch (err) {
+      setResults([])
     }
   }
 
@@ -54,46 +69,50 @@ export default function TrendDashboard() {
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-5">
           <label className="text-sm uppercase tracking-[0.3em] text-slate-400">Search player</label>
-          <div className="mt-4 flex gap-3">
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search name"
-              className="flex-1 rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-white"
-            />
-            <button onClick={handleSearch} className="rounded-2xl bg-cyan-400 px-4 py-3 font-semibold text-slate-950">
-              Search
-            </button>
+          <div className="mt-4 relative">
+            <div className="flex gap-3">
+              <input
+                value={query}
+                onChange={(e) => handleQueryChange(e.target.value)}
+                placeholder="Search name"
+                className="flex-1 rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-white"
+              />
+              <button onClick={handleSearch} className="rounded-2xl bg-cyan-400 px-4 py-3 font-semibold text-slate-950">
+                Search
+              </button>
+            </div>
+            {results.length > 0 && (
+              <div className="absolute left-0 right-0 z-20 mt-2 max-h-72 overflow-auto rounded-3xl border border-slate-700 bg-slate-950/95 shadow-2xl">
+                {results.slice(0, 6).map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => {
+                      loadTrends(item.id)
+                      setResults([])
+                      setQuery(item.full_name)
+                    }}
+                    className="w-full text-left px-4 py-3 text-slate-100 transition hover:bg-slate-900"
+                  >
+                    <div className="font-semibold">{item.full_name}</div>
+                    <div className="text-sm text-slate-500">{item.team_name || 'Free agent'}</div>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
-          {results.length > 0 && (
-            <div className="mt-4 space-y-2">
-              {results.slice(0, 6).map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => {
-                    loadTrends(item.id)
-                    setResults([])
-                    setQuery(item.full_name)
-                  }}
-                  className="w-full rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-left text-slate-100 hover:border-cyan-400"
-                >
-                  {item.full_name}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-
-        <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-5">
-          <div className="text-sm uppercase tracking-[0.3em] text-slate-400">Selected</div>
-          {player ? (
-            <div className="mt-4 space-y-2">
-              <div className="text-xl font-semibold text-white">{player.full_name}</div>
-              <div className="text-slate-400">{player.team_name || 'Free agent'}</div>
-            </div>
-          ) : (
-            <div className="mt-4 text-slate-500">Choose a player to see season trend charts.</div>
-          )}
+          
+          <div className="mt-4 rounded-3xl border border-slate-800 bg-slate-900/90 p-5">
+            <div className="text-sm uppercase tracking-[0.3em] text-slate-400">Selected</div>
+            {player ? (
+              <div className="mt-4 space-y-2">
+                <div className="text-xl font-semibold text-white">{player.full_name}</div>
+                <div className="text-slate-400">{player.team_name || 'Free agent'}</div>
+              </div>
+            ) : (
+              <div className="mt-4 text-slate-500">Choose a player to see season trend charts.</div>
+            )}
+          </div>
         </div>
       </div>
 
