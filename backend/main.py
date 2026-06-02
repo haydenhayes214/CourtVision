@@ -85,20 +85,26 @@ def resolve_team_name(player: Dict[str, Any]) -> Optional[str]:
 
 
 def parse_player_info(player_id: int) -> PlayerInfo:
-    details = commonplayerinfo.CommonPlayerInfo(player_id=player_id).get_normalized_dict()
-    info = details["CommonPlayerInfo"][0]
-    return PlayerInfo(
-        id=player_id,
-        full_name=info.get("DISPLAY_FIRST_LAST"),
-        team_id=info.get("TEAM_ID"),
-        team_name=info.get("TEAM_NAME"),
-        position=info.get("POSITION"),
-        height=info.get("HEIGHT"),
-        weight=info.get("WEIGHT"),
-        birthdate=info.get("BIRTHDATE"),
-        country=info.get("COUNTRY"),
-        draft_year=info.get("DRAFT_YEAR"),
-    )
+    cache_path = os.path.join(CACHE_DIR, f"player_info_{player_id}.json")
+
+    def fetch():
+        details = commonplayerinfo.CommonPlayerInfo(player_id=player_id).get_normalized_dict()
+        info = details["CommonPlayerInfo"][0]
+        return {
+            "id": player_id,
+            "full_name": info.get("DISPLAY_FIRST_LAST"),
+            "team_id": info.get("TEAM_ID"),
+            "team_name": info.get("TEAM_NAME"),
+            "position": info.get("POSITION"),
+            "height": info.get("HEIGHT"),
+            "weight": info.get("WEIGHT"),
+            "birthdate": info.get("BIRTHDATE"),
+            "country": info.get("COUNTRY"),
+            "draft_year": info.get("DRAFT_YEAR"),
+        }
+
+    info_data = cache_response(cache_path, fetch)
+    return PlayerInfo(**info_data)
 
 
 def normalize_stat(value: Any) -> float:
@@ -149,17 +155,31 @@ def build_season_stats(player_id: int) -> Dict[str, Any]:
 @app.get("/players/search")
 def search_players(name: str = Query(..., min_length=1, description="Search by player name")):
     query = name.strip().lower()
-    results = [
-        {
-            "id": player["id"],
-            "full_name": player["full_name"],
-            "team_id": player.get("team_id"),
-            "team_name": resolve_team_name(player),
-            "position": player.get("position"),
-        }
-        for player in get_player_list()
-        if query in player["full_name"].lower()
-    ]
+    results = []
+    for player in get_player_list():
+        if query not in player["full_name"].lower():
+            continue
+        team_name = None
+        position = None
+        team_id = player.get("team_id")
+        try:
+            info = parse_player_info(player["id"])
+            team_name = info.team_name
+            position = info.position
+            team_id = info.team_id
+        except Exception:
+            team_name = resolve_team_name(player)
+            position = player.get("position")
+
+        results.append(
+            {
+                "id": player["id"],
+                "full_name": player["full_name"],
+                "team_id": team_id,
+                "team_name": team_name,
+                "position": position,
+            }
+        )
     if not results:
         raise HTTPException(status_code=404, detail="No players found")
     return {"results": results[:25]}
@@ -227,11 +247,18 @@ def similar_players(player_id: int):
             if not other_stats:
                 continue
             score = similarity_score(base_stats, other_stats)
+            team_name = resolve_team_name(player)
+            try:
+                player_info = parse_player_info(pid)
+                team_name = player_info.team_name or team_name
+            except Exception:
+                pass
+
             candidates.append(
                 {
                     "id": pid,
                     "full_name": player["full_name"],
-                    "team_name": resolve_team_name(player),
+                    "team_name": team_name,
                     "score": score,
                 }
             )
