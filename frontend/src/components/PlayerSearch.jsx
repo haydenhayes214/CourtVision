@@ -28,7 +28,7 @@ export default function PlayerSearch() {
   return (
     <div className="space-y-6">
       <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-6 shadow-xl">
-        <div className="text-sm font-semibold uppercase tracking-[0.3em] text-amber-400">Search</div>
+        <div className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">Search</div>
         <h1 className="mt-3 text-3xl font-semibold text-white">Find NBA players fast</h1>
         <p className="mt-2 text-slate-400">Search by name to compare stats, view trends, and find similar players.</p>
         <form onSubmit={handleSearch} className="mt-6 flex flex-col gap-3 sm:flex-row">
@@ -38,9 +38,9 @@ export default function PlayerSearch() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="LeBron James, Stephen Curry, Luka"
-            className="flex-1 rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-white outline-none transition focus:border-amber-400"
+            className="flex-1 rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-white outline-none transition focus:border-cyan-400"
           />
-          <button type="submit" className="rounded-2xl bg-amber-400 px-5 py-3 font-semibold text-slate-950 transition hover:bg-amber-300">
+          <button type="submit" className="rounded-2xl bg-cyan-400 px-5 py-3 font-semibold text-slate-950 transition hover:bg-cyan-300">
             {loading ? 'Searching…' : 'Search players'}
           </button>
         </form>
@@ -66,9 +66,9 @@ export default function PlayerSearch() {
                   setLoading(false)
                 }
               }}
-              className="group rounded-3xl border border-slate-800 bg-slate-900/90 p-5 text-left transition hover:border-amber-400"
+              className="group rounded-3xl border border-slate-800 bg-slate-900/90 p-5 text-left transition hover:border-cyan-400"
             >
-              <div className="text-sm text-amber-400">{player.team_name || 'Free agent'}</div>
+              <div className="text-sm text-cyan-300">{player.team_name || 'Free agent'}</div>
               <div className="mt-2 text-xl font-semibold text-white">{player.full_name}</div>
               <div className="mt-1 text-slate-400">{player.position || 'Position N/A'}</div>
               <div className="mt-4 rounded-2xl bg-slate-950/80 px-4 py-3 text-sm text-slate-300 transition group-hover:bg-slate-900">View profile & stats</div>
@@ -81,7 +81,7 @@ export default function PlayerSearch() {
         <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-6 shadow-xl">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <div className="text-sm uppercase tracking-[0.3em] text-amber-400">{selected.player.team_name || 'Free agent'}</div>
+              <div className="text-sm uppercase tracking-[0.3em] text-cyan-300">{selected.player.team_name || 'Free agent'}</div>
               <h2 className="mt-2 text-3xl font-semibold text-white">{selected.player.full_name}</h2>
               <p className="mt-2 text-slate-400">Latest season summary with key shooting and per-game stats.</p>
             </div>

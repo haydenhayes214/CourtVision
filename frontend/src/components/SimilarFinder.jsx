@@ -41,7 +41,7 @@ export default function SimilarFinder() {
   return (
     <div className="space-y-6">
       <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-6 shadow-xl">
-        <div className="text-sm font-semibold uppercase tracking-[0.3em] text-amber-400">Similar finder</div>
+        <div className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">Similar finder</div>
         <h1 className="mt-3 text-3xl font-semibold text-white">Find players with similar profiles</h1>
         <p className="mt-2 text-slate-400">Discover the top 5 players who match by scoring, shooting, and defense.</p>
       </div>
@@ -54,7 +54,7 @@ export default function SimilarFinder() {
             placeholder="Search player"
             className="flex-1 rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-white"
           />
-          <button onClick={handleSearch} className="rounded-2xl bg-amber-400 px-5 py-3 font-semibold text-slate-950">
+          <button onClick={handleSearch} className="rounded-2xl bg-cyan-400 px-5 py-3 font-semibold text-slate-950">
             Search
           </button>
         </div>
@@ -65,7 +65,7 @@ export default function SimilarFinder() {
               <button
                 key={item.id}
                 onClick={() => handleSelect(item)}
-                className="rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-4 text-left text-white transition hover:border-amber-400"
+                className="rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-4 text-left text-white transition hover:border-cyan-400"
               >
                 <div className="font-semibold">{item.full_name}</div>
                 <div className="text-sm text-slate-500">{item.team_name || 'Unknown'}</div>
@@ -104,7 +104,7 @@ export default function SimilarFinder() {
                     <div className="font-semibold">{item.full_name}</div>
                     <div className="text-sm text-slate-500">{item.team_name || 'Unknown team'}</div>
                   </div>
-                  <div className="rounded-2xl bg-amber-400 px-4 py-2 font-semibold text-slate-950">{item.score}</div>
+                  <div className="rounded-2xl bg-cyan-400 px-4 py-2 font-semibold text-slate-950">{item.score}</div>
                 </div>
               </div>
             ))}

@@ -18,14 +18,14 @@ const categories = [
 function PlayerSelect({ label, player, onSelect, query, setQuery, results, onSearch }) {
   return (
     <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-5">
-      <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-amber-400">{label}</h2>
+      <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">{label}</h2>
       <input
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search player"
         className="mt-4 w-full rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-white outline-none"
       />
-      <button onClick={onSearch} className="mt-3 w-full rounded-2xl bg-amber-400 px-4 py-3 font-semibold text-slate-950">
+      <button onClick={onSearch} className="mt-3 w-full rounded-2xl bg-cyan-400 px-4 py-3 font-semibold text-slate-950">
         Search
       </button>
       {player && (
@@ -40,7 +40,7 @@ function PlayerSelect({ label, player, onSelect, query, setQuery, results, onSea
             <button
               key={item.id}
               onClick={() => onSelect(item)}
-              className="w-full rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-left text-slate-100 transition hover:border-amber-400"
+              className="w-full rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-left text-slate-100 transition hover:border-cyan-400"
             >
               {item.full_name}
               <div className="text-xs text-slate-500">{item.team_name || 'Unknown team'}</div>
@@ -94,7 +94,7 @@ export default function ComparePage() {
   return (
     <div className="space-y-6">
       <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-6 shadow-xl">
-        <div className="text-sm font-semibold uppercase tracking-[0.3em] text-amber-400">Compare</div>
+        <div className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">Compare</div>
         <h1 className="mt-3 text-3xl font-semibold text-white">Side-by-side player analytics</h1>
         <p className="mt-2 text-slate-400">Select two players and see who leads each key category.</p>
       </div>
@@ -126,7 +126,7 @@ export default function ComparePage() {
         />
       </div>
 
-      <button onClick={handleCompare} className="rounded-3xl bg-amber-400 px-6 py-4 font-semibold text-slate-950 shadow-md transition hover:bg-amber-300">
+      <button onClick={handleCompare} className="rounded-3xl bg-cyan-400 px-6 py-4 font-semibold text-slate-950 shadow-md transition hover:bg-cyan-300">
         {loading ? 'Comparing…' : 'Compare players'}
       </button>
       {error && <div className="rounded-2xl bg-rose-500/10 px-4 py-3 text-sm text-rose-300">{error}</div>}

@@ -46,7 +46,7 @@ export default function TrendDashboard() {
   return (
     <div className="space-y-6">
       <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-6 shadow-xl">
-        <div className="text-sm font-semibold uppercase tracking-[0.3em] text-amber-400">Trends</div>
+        <div className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">Trends</div>
         <h1 className="mt-3 text-3xl font-semibold text-white">Player stat trends</h1>
         <p className="mt-2 text-slate-400">Visualize recent seasons for points, rebounds, assists, and scoring efficiency.</p>
       </div>
@@ -61,7 +61,7 @@ export default function TrendDashboard() {
               placeholder="Search name"
               className="flex-1 rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-white"
             />
-            <button onClick={handleSearch} className="rounded-2xl bg-amber-400 px-4 py-3 font-semibold text-slate-950">
+            <button onClick={handleSearch} className="rounded-2xl bg-cyan-400 px-4 py-3 font-semibold text-slate-950">
               Search
             </button>
           </div>
@@ -75,7 +75,7 @@ export default function TrendDashboard() {
                     setResults([])
                     setQuery(item.full_name)
                   }}
-                  className="w-full rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-left text-slate-100 hover:border-amber-400"
+                  className="w-full rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-left text-slate-100 hover:border-cyan-400"
                 >
                   {item.full_name}
                 </button>
