@@ -1,6 +1,5 @@
 import json
 import os
-import time
 import unicodedata
 from functools import lru_cache
 from typing import Any, Dict, List, Optional
@@ -88,6 +87,20 @@ def normalize_text(value: Optional[str]) -> str:
     return "".join(ch for ch in normalized if not unicodedata.combining(ch)).lower()
 
 
+def search_rank(player_name: str, query: str) -> int:
+    name = normalize_text(player_name)
+    words = name.split()
+    if name == query:
+        return 0
+    if name.startswith(query):
+        return 1
+    if any(word.startswith(query) for word in words):
+        return 2
+    if query in name:
+        return 3
+    return 4
+
+
 def resolve_team_name(player: Dict[str, Any]) -> Optional[str]:
     return player.get("team_name") or player.get("team_abbreviation")
 
@@ -165,32 +178,25 @@ def search_players(name: str = Query(..., min_length=1, description="Search by p
     query_norm = normalize_text(name.strip())
     results = []
     for player in get_player_list():
-        if query_norm not in normalize_text(player["full_name"]):
+        rank = search_rank(player["full_name"], query_norm)
+        if rank == 4:
             continue
-        team_name = None
-        position = None
-        team_id = player.get("team_id")
-        try:
-            info = parse_player_info(player["id"])
-            team_name = info.team_name
-            position = info.position
-            team_id = info.team_id
-        except Exception:
-            team_name = resolve_team_name(player)
-            position = player.get("position")
 
         results.append(
             {
                 "id": player["id"],
                 "full_name": player["full_name"],
-                "team_id": team_id,
-                "team_name": team_name,
-                "position": position,
+                "team_id": player.get("team_id"),
+                "team_name": resolve_team_name(player),
+                "position": player.get("position"),
+                "is_active": player.get("is_active", False),
+                "rank": rank,
             }
         )
     if not results:
         raise HTTPException(status_code=404, detail="No players found")
-    return {"results": results[:25]}
+    results.sort(key=lambda player: (player["rank"], not player["is_active"], player["full_name"]))
+    return {"results": [{key: value for key, value in player.items() if key != "rank"} for player in results[:25]]}
 
 
 @app.get("/players/{player_id}/stats")

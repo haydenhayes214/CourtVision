@@ -1,44 +1,21 @@
 import { useState } from 'react'
-import { searchPlayers, getPlayerStats } from '../api'
+import { getPlayerStats } from '../api'
+import PlayerDropdown from './PlayerDropdown'
 import StatCard from './StatCard'
 
 export default function PlayerSearch() {
-  const [query, setQuery] = useState('')
-  const [results, setResults] = useState([])
   const [selected, setSelected] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
-  const handleSearch = async (event) => {
-    event.preventDefault()
-    if (!query.trim()) return
-    setError('')
+  const handleSelect = async (player) => {
     setLoading(true)
     try {
-      const data = await searchPlayers(query)
-      setResults(data.results)
-    } catch (err) {
-      setError(err.message)
-      setResults([])
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleQueryChange = async (value) => {
-    setQuery(value)
-    if (!value.trim() || value.trim().length < 2) {
-      setResults([])
-      return
-    }
-
-    setLoading(true)
-    try {
-      const data = await searchPlayers(value)
-      setResults(data.results)
+      const data = await getPlayerStats(player.id)
+      setSelected(data)
       setError('')
     } catch (err) {
-      setResults([])
+      setError(err.message)
     } finally {
       setLoading(false)
     }
@@ -50,51 +27,13 @@ export default function PlayerSearch() {
         <div className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">Search</div>
         <h1 className="mt-3 text-3xl font-semibold text-white">Find NBA players fast</h1>
         <p className="mt-2 text-slate-400">Search by name to compare stats, view trends, and find similar players.</p>
-        <form onSubmit={handleSearch} className="mt-6">
-          <label className="sr-only" htmlFor="player-search">Player name</label>
-          <div className="relative">
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <input
-                id="player-search"
-                value={query}
-                onChange={(e) => handleQueryChange(e.target.value)}
-                placeholder="LeBron James, Stephen Curry, Luka"
-                className="flex-1 rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-white outline-none transition focus:border-cyan-400"
-              />
-              <button type="submit" className="rounded-2xl bg-cyan-400 px-5 py-3 font-semibold text-slate-950 transition hover:bg-cyan-300">
-                {loading ? 'Searching…' : 'Search players'}
-              </button>
-            </div>
-            {results.length > 0 && (
-              <div className="absolute left-0 right-0 z-20 mt-2 max-h-72 overflow-auto rounded-3xl border border-slate-700 bg-slate-950/95 shadow-2xl">
-                {results.map((player) => (
-                  <button
-                    key={player.id}
-                    type="button"
-                    onClick={async () => {
-                      setLoading(true)
-                      try {
-                        const data = await getPlayerStats(player.id)
-                        setSelected(data)
-                        setResults([])
-                        setQuery(player.full_name)
-                        setError('')
-                      } catch (err) {
-                        setError(err.message)
-                      } finally {
-                        setLoading(false)
-                      }
-                    }}
-                    className="w-full text-left px-4 py-3 text-slate-100 transition hover:bg-slate-900"
-                  >
-                    <div className="font-semibold">{player.full_name}</div>
-                    <div className="text-sm text-slate-500">{player.team_name || 'Free agent'} · {player.position || 'Position N/A'}</div>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        </form>
+        <PlayerDropdown
+          className="mt-6"
+          placeholder="LeBron James, Stephen Curry, Luka"
+          detail="position"
+          onSelect={handleSelect}
+        />
+        {loading && <div className="mt-4 text-sm text-slate-400">Loading player stats...</div>}
         {error && <div className="mt-4 rounded-2xl bg-rose-500/10 px-4 py-3 text-sm text-rose-300">{error}</div>}
       </div>
 

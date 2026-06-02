@@ -1,60 +1,14 @@
 import { useState } from 'react'
-import { searchPlayers, comparePlayers } from '../api'
+import { comparePlayers } from '../api'
+import PlayerDropdown from './PlayerDropdown'
 import StatCard from './StatCard'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 
-const categories = [
-  { key: 'ppg', label: 'PPG' },
-  { key: 'rpg', label: 'RPG' },
-  { key: 'apg', label: 'APG' },
-  { key: 'fg_pct', label: 'FG%' },
-  { key: 'fg3_pct', label: '3P%' },
-  { key: 'ft_pct', label: 'FT%' },
-  { key: 'stl', label: 'STL' },
-  { key: 'blk', label: 'BLK' },
-  { key: 'tov', label: 'TOV' },
-]
-
-function PlayerSelect({ label, player, onSelect, query, setQuery, results, onSearch, setter }) {
+function PlayerSelect({ label, player, onSelect }) {
   return (
     <div className="relative rounded-3xl border border-slate-800 bg-slate-900/90 p-5">
       <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">{label}</h2>
-      <div className="mt-4 relative">
-        <div className="flex gap-3">
-          <input
-            value={query}
-            onChange={(e) => {
-              const value = e.target.value
-              setQuery(value)
-              if (value.trim().length >= 2) {
-                onSearch(value)
-              } else {
-                setter([])
-              }
-            }}
-            placeholder="Search player"
-            className="flex-1 rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-white outline-none"
-          />
-          <button onClick={() => onSearch(query)} className="rounded-2xl bg-cyan-400 px-4 py-3 font-semibold text-slate-950">
-            Search
-          </button>
-        </div>
-        {results.length > 0 && (
-          <div className="absolute left-0 right-0 top-full z-20 mt-2 max-h-72 overflow-auto rounded-3xl border border-slate-700 bg-slate-950/95 shadow-2xl">
-            {results.slice(0, 5).map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => onSelect(item)}
-                className="w-full text-left px-4 py-3 text-slate-100 transition hover:bg-slate-900"
-              >
-                <div className="font-semibold">{item.full_name}</div>
-                <div className="text-xs text-slate-500">{item.team_name || 'Unknown team'}</div>
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
+      <PlayerDropdown className="mt-4" placeholder="Search player" onSelect={onSelect} selectedPlayer={player} />
       {player && (
         <div className="mt-4 rounded-3xl bg-slate-950/80 p-4 text-white">
           <div className="text-lg font-semibold">{player.full_name}</div>
@@ -68,26 +22,9 @@ function PlayerSelect({ label, player, onSelect, query, setQuery, results, onSea
 export default function ComparePage() {
   const [player1, setPlayer1] = useState(null)
   const [player2, setPlayer2] = useState(null)
-  const [query1, setQuery1] = useState('')
-  const [query2, setQuery2] = useState('')
-  const [results1, setResults1] = useState([])
-  const [results2, setResults2] = useState([])
   const [comparison, setComparison] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-
-  const handleSearch = async (query, setter) => {
-    if (!query.trim()) {
-      setter([])
-      return
-    }
-    try {
-      const data = await searchPlayers(query)
-      setter(data.results)
-    } catch (err) {
-      setter([])
-    }
-  }
 
   const handleCompare = async () => {
     if (!player1 || !player2) {
@@ -119,33 +56,23 @@ export default function ComparePage() {
         <PlayerSelect
           label="Player 1"
           player={player1}
-          query={query1}
-          setQuery={setQuery1}
-          results={results1}
-          setter={setResults1}
-          onSearch={(value) => handleSearch(value, setResults1)}
           onSelect={(player) => {
             setPlayer1(player)
-            setResults1([])
+            setComparison(null)
           }}
         />
         <PlayerSelect
           label="Player 2"
           player={player2}
-          query={query2}
-          setQuery={setQuery2}
-          results={results2}
-          setter={setResults2}
-          onSearch={(value) => handleSearch(value, setResults2)}
           onSelect={(player) => {
             setPlayer2(player)
-            setResults2([])
+            setComparison(null)
           }}
         />
       </div>
 
       <button onClick={handleCompare} className="rounded-3xl bg-cyan-400 px-6 py-4 font-semibold text-slate-950 shadow-md transition hover:bg-cyan-300">
-        {loading ? 'Comparing…' : 'Compare players'}
+        {loading ? 'Comparing...' : 'Compare players'}
       </button>
       {error && <div className="rounded-2xl bg-rose-500/10 px-4 py-3 text-sm text-rose-300">{error}</div>}
 

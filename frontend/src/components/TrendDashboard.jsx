@@ -1,46 +1,19 @@
 import { useState } from 'react'
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend, CartesianGrid } from 'recharts'
-import { searchPlayers, getPlayerStats } from '../api'
+import { getPlayerStats } from '../api'
+import PlayerDropdown from './PlayerDropdown'
 
 export default function TrendDashboard() {
-  const [query, setQuery] = useState('')
-  const [results, setResults] = useState([])
   const [player, setPlayer] = useState(null)
   const [trendData, setTrendData] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
-  const handleSearch = async () => {
-    if (!query.trim()) return
-    try {
-      const data = await searchPlayers(query)
-      setResults(data.results)
-    } catch (err) {
-      setResults([])
-      setError(err.message)
-    }
-  }
-
-  const handleQueryChange = async (value) => {
-    setQuery(value)
-    if (!value.trim() || value.trim().length < 2) {
-      setResults([])
-      return
-    }
-
-    try {
-      const data = await searchPlayers(value)
-      setResults(data.results)
-    } catch (err) {
-      setResults([])
-    }
-  }
-
-  const loadTrends = async (playerId) => {
+  const loadTrends = async (selectedPlayer) => {
     setLoading(true)
     setError('')
     try {
-      const data = await getPlayerStats(playerId)
+      const data = await getPlayerStats(selectedPlayer.id)
       setPlayer(data.player)
       setTrendData(data.stats.seasons.slice(-6).map((season) => ({
         season: season.season,
@@ -68,40 +41,8 @@ export default function TrendDashboard() {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-5">
-          <label className="text-sm uppercase tracking-[0.3em] text-slate-400">Search player</label>
-          <div className="mt-4 relative">
-            <div className="flex gap-3">
-              <input
-                value={query}
-                onChange={(e) => handleQueryChange(e.target.value)}
-                placeholder="Search name"
-                className="flex-1 rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-white"
-              />
-              <button onClick={handleSearch} className="rounded-2xl bg-cyan-400 px-4 py-3 font-semibold text-slate-950">
-                Search
-              </button>
-            </div>
-            {results.length > 0 && (
-              <div className="absolute left-0 right-0 z-20 mt-2 max-h-72 overflow-auto rounded-3xl border border-slate-700 bg-slate-950/95 shadow-2xl">
-                {results.slice(0, 6).map((item) => (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => {
-                      loadTrends(item.id)
-                      setResults([])
-                      setQuery(item.full_name)
-                    }}
-                    className="w-full text-left px-4 py-3 text-slate-100 transition hover:bg-slate-900"
-                  >
-                    <div className="font-semibold">{item.full_name}</div>
-                    <div className="text-sm text-slate-500">{item.team_name || 'Free agent'}</div>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-          
+          <PlayerDropdown label="Search player" placeholder="Search name" onSelect={loadTrends} selectedPlayer={player} />
+
           <div className="mt-4 rounded-3xl border border-slate-800 bg-slate-900/90 p-5">
             <div className="text-sm uppercase tracking-[0.3em] text-slate-400">Selected</div>
             {player ? (
@@ -121,7 +62,7 @@ export default function TrendDashboard() {
       <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-5">
         <div className="text-sm uppercase tracking-[0.3em] text-slate-400">Trend chart</div>
         {loading ? (
-          <div className="mt-6 text-slate-300">Loading season chart…</div>
+          <div className="mt-6 text-slate-300">Loading season chart...</div>
         ) : trendData.length > 0 ? (
           <div className="mt-6 h-[420px]">
             <ResponsiveContainer width="100%" height="100%">
