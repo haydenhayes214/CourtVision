@@ -80,6 +80,10 @@ def find_player(player_id: int) -> Dict[str, Any]:
     raise HTTPException(status_code=404, detail="Player not found")
 
 
+def resolve_team_name(player: Dict[str, Any]) -> Optional[str]:
+    return player.get("team_name") or player.get("team_abbreviation")
+
+
 def parse_player_info(player_id: int) -> PlayerInfo:
     details = commonplayerinfo.CommonPlayerInfo(player_id=player_id).get_normalized_dict()
     info = details["CommonPlayerInfo"][0]
@@ -150,7 +154,7 @@ def search_players(name: str = Query(..., min_length=1, description="Search by p
             "id": player["id"],
             "full_name": player["full_name"],
             "team_id": player.get("team_id"),
-            "team_name": player.get("team_name"),
+            "team_name": resolve_team_name(player),
             "position": player.get("position"),
         }
         for player in get_player_list()
@@ -227,7 +231,7 @@ def similar_players(player_id: int):
                 {
                     "id": pid,
                     "full_name": player["full_name"],
-                    "team_name": player.get("team_name"),
+                    "team_name": resolve_team_name(player),
                     "score": score,
                 }
             )
