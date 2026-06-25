@@ -1,0 +1,120 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: CourtVision FastAPI backend on AWS Elastic Beanstalk.
+
+Parameters:
+  ApplicationName:
+    Type: String
+    Default: courtvision-api
+  EnvironmentName:
+    Type: String
+    Default: courtvision-api-dev
+  SourceBucket:
+    Type: String
+  SourceKey:
+    Type: String
+  CacheTableName:
+    Type: String
+    Default: courtvision-cache
+  S3CacheBucketName:
+    Type: String
+    Default: ""
+
+Resources:
+  BackendInstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier
+      Policies:
+        - PolicyName: CourtVisionBackendCacheAccess
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:GetItem
+                  - dynamodb:PutItem
+                Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${CacheTableName}"
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                Resource: !Sub "arn:aws:s3:::${S3CacheBucketName}/*"
+
+  BackendInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref BackendInstanceRole
+
+  BackendApplication:
+    Type: AWS::ElasticBeanstalk::Application
+    Properties:
+      ApplicationName: !Ref ApplicationName
+      Description: CourtVision FastAPI backend.
+
+  BackendApplicationVersion:
+    Type: AWS::ElasticBeanstalk::ApplicationVersion
+    Properties:
+      ApplicationName: !Ref BackendApplication
+      SourceBundle:
+        S3Bucket: !Ref SourceBucket
+        S3Key: !Ref SourceKey
+
+  BackendEnvironment:
+    Type: AWS::ElasticBeanstalk::Environment
+    Properties:
+      ApplicationName: !Ref BackendApplication
+      EnvironmentName: !Ref EnvironmentName
+      SolutionStackName: "64bit Amazon Linux 2023 v4.13.2 running Python 3.12"
+      VersionLabel: !Ref BackendApplicationVersion
+      OptionSettings:
+        - Namespace: aws:elasticbeanstalk:environment
+          OptionName: EnvironmentType
+          Value: SingleInstance
+        - Namespace: aws:autoscaling:launchconfiguration
+          OptionName: IamInstanceProfile
+          Value: !Ref BackendInstanceProfile
+        - Namespace: aws:autoscaling:launchconfiguration
+          OptionName: InstanceType
+          Value: t3.micro
+        - Namespace: aws:elasticbeanstalk:application:environment
+          OptionName: COURTVISION_CACHE_BACKEND
+          Value: dynamodb
+        - Namespace: aws:elasticbeanstalk:application:environment
+          OptionName: COURTVISION_DYNAMODB_TABLE
+          Value: !Ref CacheTableName
+        - Namespace: aws:elasticbeanstalk:application:environment
+          OptionName: COURTVISION_S3_CACHE_BUCKET
+          Value: !Ref S3CacheBucketName
+        - Namespace: aws:elasticbeanstalk:application:environment
+          OptionName: COURTVISION_CACHE_TTL_SECONDS
+          Value: "604800"
+        - Namespace: aws:elasticbeanstalk:application:environment
+          OptionName: COURTVISION_ALLOW_LIVE_NBA_FETCH
+          Value: "true"
+        - Namespace: aws:elasticbeanstalk:application:environment
+          OptionName: COURTVISION_NBA_API_TIMEOUT_SECONDS
+          Value: "150"
+        - Namespace: aws:elasticbeanstalk:application:environment
+          OptionName: COURTVISION_NBA_SEASON
+          Value: "2025-26"
+        - Namespace: aws:elasticbeanstalk:application:environment
+          OptionName: AWS_DEFAULT_REGION
+          Value: !Ref AWS::Region
+        - Namespace: aws:elasticbeanstalk:application:environment
+          OptionName: AWS_REGION
+          Value: !Ref AWS::Region
+
+Outputs:
+  BackendUrl:
+    Value: !Sub "http://${BackendEnvironment.EndpointURL}"
+  EnvironmentName:
+    Value: !Ref BackendEnvironment

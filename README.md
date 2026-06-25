@@ -17,12 +17,23 @@ CourtVision Analytics is an MVP NBA analytics dashboard built with React, Vite, 
 - Frontend: React, Vite, Tailwind CSS, Recharts
 - Backend: Python, FastAPI
 - Data: `nba_api`
-- Caching: local JSON cache
+- Caching: local JSON cache, DynamoDB, or S3
+- AWS-ready deployment: S3/CloudFront frontend, ECS Fargate backend, DynamoDB cache
 
 ## Project Structure
 
 - `/frontend` – React user interface
 - `/backend` – FastAPI backend and caching logic
+
+## AWS Architecture
+
+- Frontend static hosting: Amazon S3 with CloudFront
+- Backend compute: FastAPI on Elastic Beanstalk now; ECS Fargate-ready Dockerfile included
+- Cache storage: DynamoDB with TTL, or S3 JSON object cache
+- Infrastructure template: `infra/cloudformation/courtvision-web.yml`
+- Backend infrastructure template: `infra/cloudformation/courtvision-backend-eb.yml`
+- Deployment helper: `scripts/deploy-frontend-s3.ps1`
+- Full notes: `docs/aws-architecture.md`
 
 ## Setup
 
@@ -69,8 +80,10 @@ npm run dev -- --host
 
 ## Notes
 
-- The backend caches player lists and player season stats in `backend/cache/`.
+- The backend caches player lists and player season stats in `backend/cache/` by default.
+- Set `COURTVISION_CACHE_BACKEND=dynamodb` or `COURTVISION_CACHE_BACKEND=s3` to use AWS-backed cache storage.
 - If `nba_api` data changes or new players are added, delete the cache files and restart the backend.
+- See `docs/aws-architecture.md` for the AWS migration plan and deployment commands.
 
 ## Future Improvements
 
