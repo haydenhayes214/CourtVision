@@ -21,7 +21,7 @@ export default function App() {
           <div>
             <p className="text-sm uppercase tracking-[0.4em] text-cyan-300">CourtVision Analytics</p>
             <h1 className="mt-3 text-4xl font-semibold text-white sm:text-5xl">NBA dashboard for player scouting and comparison</h1>
-            <p className="mt-4 max-w-2xl text-slate-400">Search players, compare two athletes side-by-side, explore season trends, and discover statistically similar profiles with a polished React + FastAPI MVP.</p>
+            <p className="mt-4 max-w-2xl text-slate-400">Search players, compare two athletes side-by-side, explore season trends, and discover statistically similar profiles.</p>
           </div>
         </header>
 

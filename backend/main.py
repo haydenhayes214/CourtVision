@@ -372,8 +372,13 @@ def get_espn_roster_index() -> Dict[str, Any]:
 
 def espn_player_for_nba_player(player_id: int) -> Optional[Dict[str, Any]]:
     player = find_player(player_id)
+    player_key = normalize_player_key(player.get("full_name"))
     try:
-        roster_player = get_espn_roster_index().get("players_by_name", {}).get(normalize_player_key(player.get("full_name")))
+        stats_player = get_espn_current_stats_index().get("players_by_name", {}).get(player_key)
+        if stats_player:
+            return stats_player
+
+        roster_player = get_espn_roster_index().get("players_by_name", {}).get(player_key)
     except Exception:
         return None
     return roster_player
@@ -446,7 +451,7 @@ def get_current_league_stats() -> Dict[int, Dict[str, Any]]:
 
 def build_current_season_stats(player_id: int) -> Dict[str, Any]:
     espn_player = espn_player_for_nba_player(player_id)
-    if espn_player:
+    if espn_player and "stats" in espn_player:
         stats = espn_player["stats"]
         stats["player_id"] = player_id
         return stats
@@ -511,9 +516,6 @@ def build_season_stats(player_id: int) -> Dict[str, Any]:
             "latest_season": seasons[-1] if seasons else {},
         }
 
-    if ALLOW_LIVE_NBA_FETCH:
-        raise HTTPException(status_code=404, detail="Current season stats not found for this player")
-
     try:
         result = fetch()
     except Exception:
@@ -576,6 +578,8 @@ def player_stats(player_id: int):
         info = parse_player_info(player_id)
         stats = build_season_stats(player_id)
         return {"player": info.dict(), "stats": stats}
+    except HTTPException:
+        raise
     except Exception as exc:
         raise HTTPException(status_code=500, detail=str(exc))
 
@@ -589,12 +593,17 @@ def compare_players(player1: int = Query(...), player2: int = Query(...)):
     categories = ["ppg", "rpg", "apg", "fg_pct", "fg3_pct", "ft_pct", "stl", "blk", "tov"]
     comparison = []
     for category in categories:
+        player1_value = stats1["stats"]["latest_season"].get(category, 0)
+        player2_value = stats2["stats"]["latest_season"].get(category, 0)
+        leader = "player1" if player1_value >= player2_value else "player2"
+        if category == "tov":
+            leader = "player1" if player1_value <= player2_value else "player2"
         comparison.append(
             {
                 "category": category,
-                "player1": stats1["stats"]["latest_season"].get(category, 0),
-                "player2": stats2["stats"]["latest_season"].get(category, 0),
-                "leader": "player1" if stats1["stats"]["latest_season"].get(category, 0) >= stats2["stats"]["latest_season"].get(category, 0) else "player2",
+                "player1": player1_value,
+                "player2": player2_value,
+                "leader": leader,
             }
         )
     return {
