@@ -33,18 +33,18 @@ export default function TrendDashboard() {
 
   return (
     <div className="space-y-6">
-      <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-        <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Trends</div>
+      <section className="rounded-lg border border-slate-300 bg-white p-5 shadow-sm">
+        <div className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-700">Trends</div>
         <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">Player stat trends</h2>
-        <p className="mt-2 text-sm leading-6 text-slate-500">Visualize recent seasons for points, rebounds, assists, and scoring efficiency.</p>
+        <p className="mt-2 text-sm leading-6 text-slate-700">Visualize recent seasons for points, rebounds, assists, and scoring efficiency.</p>
       </section>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="rounded-lg border border-slate-300 bg-white p-5 shadow-sm">
           <PlayerDropdown label="Search player" placeholder="Search name" onSelect={loadTrends} selectedPlayer={player} />
 
-          <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 p-5">
-            <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Selected</div>
+          <div className="mt-4 rounded-lg border border-slate-300 bg-amber-50 p-5">
+            <div className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-700">Selected</div>
             {player ? (
               <div className="mt-4 space-y-2">
                 <div className="text-xl font-semibold text-slate-950">{player.full_name}</div>
@@ -59,8 +59,8 @@ export default function TrendDashboard() {
 
       {error && <div className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</div>}
 
-      <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-        <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Trend chart</div>
+      <div className="rounded-lg border border-slate-300 bg-white p-5 shadow-sm">
+        <div className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-700">Trend chart</div>
         {loading ? (
           <div className="mt-6 text-slate-500">Loading season chart...</div>
         ) : trendData.length > 0 ? (
@@ -73,14 +73,14 @@ export default function TrendDashboard() {
                 <Tooltip wrapperStyle={{ backgroundColor: '#0f172a', borderRadius: 12 }} contentStyle={{ border: 'none', boxShadow: '0 1px 8px rgba(0,0,0,0.3)' }} />
                 <Legend />
                 <Line type="monotone" dataKey="PPG" stroke="#0f172a" strokeWidth={3} activeDot={{ r: 6 }} />
-                <Line type="monotone" dataKey="RPG" stroke="#14b8a6" strokeWidth={3} />
-                <Line type="monotone" dataKey="APG" stroke="#6366f1" strokeWidth={3} />
-                <Line type="monotone" dataKey="EFF" stroke="#f59e0b" strokeWidth={3} />
+                <Line type="monotone" dataKey="RPG" stroke="#0f766e" strokeWidth={3} />
+                <Line type="monotone" dataKey="APG" stroke="#4338ca" strokeWidth={3} />
+                <Line type="monotone" dataKey="EFF" stroke="#d97706" strokeWidth={3} />
               </LineChart>
             </ResponsiveContainer>
           </div>
         ) : (
-          <div className="mt-6 rounded-lg border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-slate-500">
+          <div className="mt-6 rounded-lg border border-dashed border-slate-400 bg-slate-100 p-8 text-center font-medium text-slate-600">
             Search and select a player to render a season trend line chart.
           </div>
         )}

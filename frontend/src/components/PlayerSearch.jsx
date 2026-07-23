@@ -23,10 +23,10 @@ export default function PlayerSearch() {
 
   return (
     <div className="space-y-6">
-      <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-        <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Search</div>
+      <section className="rounded-lg border border-slate-300 bg-white p-5 shadow-sm">
+        <div className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-700">Search</div>
         <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">Find NBA players fast</h2>
-        <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">Search by name to compare stats, view trends, and find similar players.</p>
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-700">Search by name to compare stats, view trends, and find similar players.</p>
         <PlayerDropdown
           className="mt-6"
           placeholder="LeBron James, Stephen Curry, Luka"
@@ -38,12 +38,12 @@ export default function PlayerSearch() {
       </section>
 
       {selected && (
-        <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="rounded-lg border border-slate-300 bg-white p-5 shadow-sm">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">{selected.player.team_name || 'Free agent'}</div>
+              <div className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-700">{selected.player.team_name || 'Free agent'}</div>
               <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">{selected.player.full_name}</h2>
-              <p className="mt-2 text-sm text-slate-500">Latest season summary with key shooting and per-game stats.</p>
+              <p className="mt-2 text-sm text-slate-700">Latest season summary with key shooting and per-game stats.</p>
             </div>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <StatCard label="PPG" value={selected.stats.latest_season.ppg.toFixed(1)} />

@@ -16,13 +16,13 @@ export default function App() {
   const active = pages.find((page) => page.id === activePage)
 
   return (
-    <div className="min-h-screen bg-[#f5f7fb] text-slate-950">
+    <div className="min-h-screen bg-[#edf2f7] text-slate-950">
       <div className="mx-auto grid min-h-screen max-w-7xl gap-6 px-4 py-4 sm:px-6 lg:grid-cols-[260px_1fr] lg:px-8">
-        <aside className="flex flex-col gap-5 border-slate-200 bg-white p-4 shadow-sm sm:rounded-lg sm:border lg:sticky lg:top-4 lg:h-[calc(100vh-2rem)]">
-          <div className="border-b border-slate-200 pb-5">
-            <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-slate-950 text-sm font-bold text-white">CV</div>
-            <div className="mt-4 text-lg font-semibold">CourtVision</div>
-            <div className="mt-1 text-sm text-slate-500">NBA analytics workspace</div>
+        <aside className="flex flex-col gap-5 border-[#102033] bg-[#08111f] p-4 shadow-xl shadow-slate-900/10 sm:rounded-lg sm:border lg:sticky lg:top-4 lg:h-[calc(100vh-2rem)]">
+          <div className="border-b border-white/10 pb-5">
+            <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-amber-400 text-sm font-bold text-slate-950">CV</div>
+            <div className="mt-4 text-lg font-semibold text-white">CourtVision</div>
+            <div className="mt-1 text-sm text-slate-300">NBA analytics workspace</div>
           </div>
 
           <nav className="grid grid-cols-2 gap-2 lg:grid-cols-1">
@@ -32,33 +32,33 @@ export default function App() {
                 onClick={() => setActivePage(page.id)}
                 className={`group rounded-lg border px-3 py-3 text-left transition ${
                   activePage === page.id
-                    ? 'border-slate-950 bg-slate-950 text-white shadow-sm'
-                    : 'border-transparent bg-transparent text-slate-600 hover:border-slate-200 hover:bg-slate-50 hover:text-slate-950'
+                    ? 'border-amber-300 bg-amber-400 text-slate-950 shadow-sm shadow-amber-400/20'
+                    : 'border-transparent bg-transparent text-slate-300 hover:border-white/15 hover:bg-white/10 hover:text-white'
                 }`}
               >
                 <span className="block text-sm font-semibold">{page.label}</span>
-                <span className={`mt-0.5 block text-xs ${activePage === page.id ? 'text-slate-300' : 'text-slate-400'}`}>{page.kicker}</span>
+                <span className={`mt-0.5 block text-xs ${activePage === page.id ? 'text-slate-800' : 'text-slate-400'}`}>{page.kicker}</span>
               </button>
             ))}
           </nav>
 
-          <div className="mt-auto hidden rounded-lg border border-slate-200 bg-slate-50 p-4 lg:block">
+          <div className="mt-auto hidden rounded-lg border border-white/10 bg-white/5 p-4 lg:block">
             <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Status</div>
-            <div className="mt-3 flex items-center gap-2 text-sm font-medium text-slate-700">
-              <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
+            <div className="mt-3 flex items-center gap-2 text-sm font-medium text-white">
+              <span className="h-2.5 w-2.5 rounded-full bg-teal-300" />
               Local dashboard
             </div>
           </div>
         </aside>
 
         <div className="flex min-w-0 flex-col gap-5">
-          <header className="border-b border-slate-200 bg-[#f5f7fb] py-4 lg:sticky lg:top-0 lg:z-20">
+          <header className="border-b border-slate-300 bg-[#edf2f7] py-4 lg:sticky lg:top-0 lg:z-20">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-500">{active?.kicker}</p>
+                <p className="text-sm font-semibold text-teal-700">{active?.kicker}</p>
                 <h1 className="mt-1 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">{active?.label}</h1>
               </div>
-              <div className="rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-500 shadow-sm">
+              <div className="rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm">
                 Search, compare, trend, and match player profiles.
               </div>
             </div>

@@ -78,7 +78,7 @@ export default function PlayerDropdown({ label, placeholder = 'Search player', o
   return (
     <div className={`relative ${className}`}>
       {label && (
-        <label htmlFor={inputId} className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
+        <label htmlFor={inputId} className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-700">
           {label}
         </label>
       )}
@@ -94,7 +94,7 @@ export default function PlayerDropdown({ label, placeholder = 'Search player', o
           role="combobox"
           aria-expanded={open}
           aria-controls={`${inputId}-menu`}
-          className="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 pr-12 text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-slate-950 focus:ring-4 focus:ring-slate-200"
+          className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 pr-12 text-slate-950 outline-none transition placeholder:text-slate-500 focus:border-teal-700 focus:ring-4 focus:ring-teal-100"
         />
         <button
           type="button"
@@ -106,7 +106,7 @@ export default function PlayerDropdown({ label, placeholder = 'Search player', o
               setOpen((current) => !current)
             }
           }}
-          className="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-md border border-slate-200 bg-slate-50 text-slate-500 transition hover:border-slate-300 hover:bg-slate-100 hover:text-slate-950"
+          className="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-md border border-slate-300 bg-slate-950 text-white transition hover:border-teal-700 hover:bg-teal-700"
         >
           +
         </button>
@@ -122,7 +122,7 @@ export default function PlayerDropdown({ label, placeholder = 'Search player', o
         <div
           id={`${inputId}-menu`}
           role="listbox"
-          className="absolute left-0 right-0 z-30 mt-2 max-h-72 overflow-auto rounded-lg border border-slate-200 bg-white shadow-xl"
+          className="absolute left-0 right-0 z-30 mt-2 max-h-72 overflow-auto rounded-lg border border-slate-300 bg-white shadow-xl"
         >
           {results.map((player) => (
             <button
@@ -130,7 +130,7 @@ export default function PlayerDropdown({ label, placeholder = 'Search player', o
               type="button"
               role="option"
               onClick={() => handleSelect(player)}
-              className="w-full px-4 py-3 text-left text-slate-700 transition hover:bg-slate-50"
+              className="w-full px-4 py-3 text-left text-slate-700 transition hover:bg-teal-50"
             >
               <div className="font-semibold text-slate-950">{player.full_name}</div>
               <div className="text-sm text-slate-500">
