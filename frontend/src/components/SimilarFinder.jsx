@@ -25,46 +25,46 @@ export default function SimilarFinder() {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-6 shadow-xl">
-        <div className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">Similar finder</div>
-        <h1 className="mt-3 text-3xl font-semibold text-white">Find players with similar profiles</h1>
-        <p className="mt-2 text-slate-400">Discover the top 5 players who match by scoring, shooting, and defense.</p>
-      </div>
+      <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Similar finder</div>
+        <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">Find players with similar profiles</h2>
+        <p className="mt-2 text-sm leading-6 text-slate-500">Discover the top 5 players who match by scoring, shooting, and defense.</p>
+      </section>
 
-      <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-5">
+      <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
         <PlayerDropdown placeholder="Search player" onSelect={handleSelect} selectedPlayer={player} />
       </div>
 
-      {error && <div className="rounded-2xl bg-rose-500/10 px-4 py-3 text-sm text-rose-300">{error}</div>}
+      {error && <div className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</div>}
 
       {player && (
         <div className="grid gap-4 md:grid-cols-2">
-          <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-5">
-            <div className="text-sm uppercase tracking-[0.3em] text-slate-400">Selected player</div>
-            <div className="mt-4 text-2xl font-semibold text-white">{player.full_name}</div>
-            <div className="text-slate-400">{player.team_name || 'Free agent'}</div>
+          <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Selected player</div>
+            <div className="mt-4 text-2xl font-semibold tracking-tight text-slate-950">{player.full_name}</div>
+            <div className="text-slate-500">{player.team_name || 'Free agent'}</div>
           </div>
-          <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-5">
-            <div className="text-sm uppercase tracking-[0.3em] text-slate-400">Similarity</div>
-            <div className="mt-4 text-4xl font-semibold text-white">Top 5</div>
+          <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Similarity</div>
+            <div className="mt-4 text-4xl font-semibold tracking-tight text-slate-950">Top 5</div>
             <div className="text-slate-500">Normalized stat similarity across scoring and shooting metrics.</div>
           </div>
         </div>
       )}
 
-      <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-5">
+      <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
         {loading ? (
-          <div className="text-slate-300">Loading similar players...</div>
+          <div className="text-slate-500">Loading similar players...</div>
         ) : similar.length > 0 ? (
           <div className="space-y-3">
             {similar.map((item) => (
-              <div key={item.id} className="rounded-3xl border border-slate-800 bg-slate-950/80 px-4 py-4 text-white">
+              <div key={item.id} className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-4">
                 <div className="flex items-center justify-between gap-4">
                   <div>
-                    <div className="font-semibold">{item.full_name}</div>
+                    <div className="font-semibold text-slate-950">{item.full_name}</div>
                     <div className="text-sm text-slate-500">{item.team_name || 'Unknown team'}</div>
                   </div>
-                  <div className="rounded-2xl bg-cyan-400 px-4 py-2 font-semibold text-slate-950">{item.score}</div>
+                  <div className="rounded-md bg-slate-950 px-4 py-2 font-semibold text-white">{item.score}</div>
                 </div>
               </div>
             ))}

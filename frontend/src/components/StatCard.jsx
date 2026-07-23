@@ -1,8 +1,8 @@
 export default function StatCard({ label, value, highlight }) {
   return (
-    <div className={`rounded-3xl border border-slate-800 bg-slate-900/90 p-4 shadow-lg ${highlight ? 'ring-2 ring-cyan-400/50' : ''}`}>
-      <div className="text-sm uppercase tracking-[0.2em] text-slate-400">{label}</div>
-      <div className="mt-2 text-3xl font-semibold text-white">{value}</div>
+    <div className={`rounded-lg border bg-white p-4 shadow-sm ${highlight ? 'border-emerald-300 ring-2 ring-emerald-100' : 'border-slate-200'}`}>
+      <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">{label}</div>
+      <div className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">{value}</div>
     </div>
   )
 }

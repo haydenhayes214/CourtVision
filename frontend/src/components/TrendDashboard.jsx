@@ -33,22 +33,22 @@ export default function TrendDashboard() {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-6 shadow-xl">
-        <div className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">Trends</div>
-        <h1 className="mt-3 text-3xl font-semibold text-white">Player stat trends</h1>
-        <p className="mt-2 text-slate-400">Visualize recent seasons for points, rebounds, assists, and scoring efficiency.</p>
-      </div>
+      <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Trends</div>
+        <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">Player stat trends</h2>
+        <p className="mt-2 text-sm leading-6 text-slate-500">Visualize recent seasons for points, rebounds, assists, and scoring efficiency.</p>
+      </section>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-5">
+        <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
           <PlayerDropdown label="Search player" placeholder="Search name" onSelect={loadTrends} selectedPlayer={player} />
 
-          <div className="mt-4 rounded-3xl border border-slate-800 bg-slate-900/90 p-5">
-            <div className="text-sm uppercase tracking-[0.3em] text-slate-400">Selected</div>
+          <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 p-5">
+            <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Selected</div>
             {player ? (
               <div className="mt-4 space-y-2">
-                <div className="text-xl font-semibold text-white">{player.full_name}</div>
-                <div className="text-slate-400">{player.team_name || 'Free agent'}</div>
+                <div className="text-xl font-semibold text-slate-950">{player.full_name}</div>
+                <div className="text-slate-500">{player.team_name || 'Free agent'}</div>
               </div>
             ) : (
               <div className="mt-4 text-slate-500">Choose a player to see season trend charts.</div>
@@ -57,30 +57,30 @@ export default function TrendDashboard() {
         </div>
       </div>
 
-      {error && <div className="rounded-2xl bg-rose-500/10 px-4 py-3 text-sm text-rose-300">{error}</div>}
+      {error && <div className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</div>}
 
-      <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-5">
-        <div className="text-sm uppercase tracking-[0.3em] text-slate-400">Trend chart</div>
+      <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Trend chart</div>
         {loading ? (
-          <div className="mt-6 text-slate-300">Loading season chart...</div>
+          <div className="mt-6 text-slate-500">Loading season chart...</div>
         ) : trendData.length > 0 ? (
           <div className="mt-6 h-[420px]">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={trendData} margin={{ top: 20, right: 20, left: 0, bottom: 0 }}>
-                <CartesianGrid stroke="#334155" strokeDasharray="3 3" />
-                <XAxis dataKey="season" tick={{ fill: '#94a3b8' }} />
-                <YAxis tick={{ fill: '#94a3b8' }} />
+                <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" />
+                <XAxis dataKey="season" tick={{ fill: '#64748b' }} />
+                <YAxis tick={{ fill: '#64748b' }} />
                 <Tooltip wrapperStyle={{ backgroundColor: '#0f172a', borderRadius: 12 }} contentStyle={{ border: 'none', boxShadow: '0 1px 8px rgba(0,0,0,0.3)' }} />
                 <Legend />
-                <Line type="monotone" dataKey="PPG" stroke="#facc15" strokeWidth={3} activeDot={{ r: 6 }} />
-                <Line type="monotone" dataKey="RPG" stroke="#38bdf8" strokeWidth={3} />
-                <Line type="monotone" dataKey="APG" stroke="#a78bfa" strokeWidth={3} />
-                <Line type="monotone" dataKey="EFF" stroke="#34d399" strokeWidth={3} />
+                <Line type="monotone" dataKey="PPG" stroke="#0f172a" strokeWidth={3} activeDot={{ r: 6 }} />
+                <Line type="monotone" dataKey="RPG" stroke="#14b8a6" strokeWidth={3} />
+                <Line type="monotone" dataKey="APG" stroke="#6366f1" strokeWidth={3} />
+                <Line type="monotone" dataKey="EFF" stroke="#f59e0b" strokeWidth={3} />
               </LineChart>
             </ResponsiveContainer>
           </div>
         ) : (
-          <div className="mt-6 rounded-3xl border border-dashed border-slate-700 bg-slate-950/80 p-8 text-center text-slate-500">
+          <div className="mt-6 rounded-lg border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-slate-500">
             Search and select a player to render a season trend line chart.
           </div>
         )}

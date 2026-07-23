@@ -6,13 +6,13 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 
 function PlayerSelect({ label, player, onSelect }) {
   return (
-    <div className="relative rounded-3xl border border-slate-800 bg-slate-900/90 p-5">
-      <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">{label}</h2>
+    <div className="relative rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+      <h2 className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">{label}</h2>
       <PlayerDropdown className="mt-4" placeholder="Search player" onSelect={onSelect} selectedPlayer={player} />
       {player && (
-        <div className="mt-4 rounded-3xl bg-slate-950/80 p-4 text-white">
+        <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 p-4">
           <div className="text-lg font-semibold">{player.full_name}</div>
-          <div className="mt-1 text-sm text-slate-400">{player.team_name || 'Free agent'}</div>
+          <div className="mt-1 text-sm text-slate-500">{player.team_name || 'Free agent'}</div>
         </div>
       )}
     </div>
@@ -46,11 +46,11 @@ export default function ComparePage() {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-6 shadow-xl">
-        <div className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">Compare</div>
-        <h1 className="mt-3 text-3xl font-semibold text-white">Side-by-side player analytics</h1>
-        <p className="mt-2 text-slate-400">Select two players and see who leads each key category.</p>
-      </div>
+      <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Compare</div>
+        <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">Side-by-side player analytics</h2>
+        <p className="mt-2 text-sm leading-6 text-slate-500">Select two players and see who leads each key category.</p>
+      </section>
 
       <div className="grid gap-4 lg:grid-cols-2">
         <PlayerSelect
@@ -71,51 +71,51 @@ export default function ComparePage() {
         />
       </div>
 
-      <button onClick={handleCompare} className="rounded-3xl bg-cyan-400 px-6 py-4 font-semibold text-slate-950 shadow-md transition hover:bg-cyan-300">
+      <button onClick={handleCompare} className="rounded-lg bg-slate-950 px-5 py-3 font-semibold text-white shadow-sm transition hover:bg-slate-800">
         {loading ? 'Comparing...' : 'Compare players'}
       </button>
-      {error && <div className="rounded-2xl bg-rose-500/10 px-4 py-3 text-sm text-rose-300">{error}</div>}
+      {error && <div className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</div>}
 
       {comparison && (
         <div className="space-y-5">
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-5">
-              <div className="text-sm uppercase tracking-[0.2em] text-slate-500">Player 1</div>
-              <div className="mt-3 text-2xl font-semibold text-white">{comparison.player1.full_name}</div>
+            <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Player 1</div>
+              <div className="mt-3 text-2xl font-semibold tracking-tight text-slate-950">{comparison.player1.full_name}</div>
             </div>
-            <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-5">
-              <div className="text-sm uppercase tracking-[0.2em] text-slate-500">Player 2</div>
-              <div className="mt-3 text-2xl font-semibold text-white">{comparison.player2.full_name}</div>
+            <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Player 2</div>
+              <div className="mt-3 text-2xl font-semibold tracking-tight text-slate-950">{comparison.player2.full_name}</div>
             </div>
           </div>
 
-          <div className="overflow-hidden rounded-3xl border border-slate-800 bg-slate-900/90">
-            <div className="grid grid-cols-2 gap-0 bg-slate-950/80 px-4 py-4 text-sm uppercase tracking-[0.2em] text-slate-400 sm:grid-cols-3">
+          <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
+            <div className="grid grid-cols-2 gap-0 bg-slate-50 px-4 py-4 text-xs font-semibold uppercase tracking-[0.16em] text-slate-400 sm:grid-cols-3">
               <div>Category</div>
               <div className="text-right sm:text-center">Player 1</div>
               <div className="text-right sm:text-center">Player 2</div>
             </div>
             {comparison.comparison.map((row) => (
-              <div key={row.category} className="grid grid-cols-2 gap-0 border-t border-slate-800 px-4 py-4 text-white sm:grid-cols-3">
-                <div className="text-slate-300">{row.category.toUpperCase()}</div>
-                <div className={`text-right sm:text-center ${row.leader === 'player1' ? 'text-emerald-300' : 'text-slate-300'}`}>{row.player1.toFixed(1)}</div>
-                <div className={`text-right sm:text-center ${row.leader === 'player2' ? 'text-emerald-300' : 'text-slate-300'}`}>{row.player2.toFixed(1)}</div>
+              <div key={row.category} className="grid grid-cols-2 gap-0 border-t border-slate-200 px-4 py-4 text-slate-700 sm:grid-cols-3">
+                <div className="font-medium text-slate-950">{row.category.toUpperCase()}</div>
+                <div className={`text-right sm:text-center ${row.leader === 'player1' ? 'font-semibold text-emerald-600' : 'text-slate-500'}`}>{row.player1.toFixed(1)}</div>
+                <div className={`text-right sm:text-center ${row.leader === 'player2' ? 'font-semibold text-emerald-600' : 'text-slate-500'}`}>{row.player2.toFixed(1)}</div>
               </div>
             ))}
           </div>
 
-          <div className="h-[460px] rounded-3xl border border-slate-800 bg-slate-950/90 p-5">
-            <div className="text-sm uppercase tracking-[0.3em] text-slate-400">Comparison chart</div>
+          <div className="h-[460px] rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Comparison chart</div>
             <div className="mt-4 h-full">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={comparison.comparison} margin={{ top: 20, right: 10, left: 0, bottom: 0 }}>
-                  <CartesianGrid stroke="#334155" strokeDasharray="3 3" />
-                  <XAxis dataKey="category" tick={{ fill: '#94a3b8' }} />
-                  <YAxis tick={{ fill: '#94a3b8' }} />
+                  <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" />
+                  <XAxis dataKey="category" tick={{ fill: '#64748b' }} />
+                  <YAxis tick={{ fill: '#64748b' }} />
                   <Tooltip wrapperStyle={{ backgroundColor: '#0f172a', borderRadius: 12 }} contentStyle={{ border: 'none', boxShadow: '0 1px 8px rgba(0,0,0,0.3)' }} />
                   <Legend />
-                  <Bar dataKey="player1" name={comparison.player1.full_name} fill="#facc15" />
-                  <Bar dataKey="player2" name={comparison.player2.full_name} fill="#38bdf8" />
+                  <Bar dataKey="player1" name={comparison.player1.full_name} fill="#0f172a" />
+                  <Bar dataKey="player2" name={comparison.player2.full_name} fill="#14b8a6" />
                 </BarChart>
               </ResponsiveContainer>
             </div>
