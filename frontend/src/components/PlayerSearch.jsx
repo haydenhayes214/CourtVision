@@ -23,27 +23,27 @@ export default function PlayerSearch() {
 
   return (
     <div className="space-y-6">
-      <section className="rounded-lg border border-slate-300 bg-white p-5 shadow-sm">
-        <div className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-700">Search</div>
-        <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">Find NBA players fast</h2>
-        <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-700">Search by name to compare stats, view trends, and find similar players.</p>
+      <section className="app-panel">
+        <div className="app-eyebrow">Search</div>
+        <h2 className="app-title">Find NBA players fast</h2>
+        <p className="app-copy max-w-2xl">Search by name to compare stats, view trends, and find similar players.</p>
         <PlayerDropdown
           className="mt-6"
           placeholder="LeBron James, Stephen Curry, Luka"
           detail="position"
           onSelect={handleSelect}
         />
-        {loading && <div className="mt-4 text-sm text-slate-500">Loading player stats...</div>}
-        {error && <div className="mt-4 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</div>}
+        {loading && <div className="mt-4 text-sm text-slate-400">Loading player stats...</div>}
+        {error && <div className="mt-4 rounded-lg border border-rose-400/30 bg-rose-950/40 px-4 py-3 text-sm text-rose-200">{error}</div>}
       </section>
 
       {selected && (
-        <section className="rounded-lg border border-slate-300 bg-white p-5 shadow-sm">
+        <section className="app-panel">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <div className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-700">{selected.player.team_name || 'Free agent'}</div>
-              <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">{selected.player.full_name}</h2>
-              <p className="mt-2 text-sm text-slate-700">Latest season summary with key shooting and per-game stats.</p>
+              <div className="app-eyebrow">{selected.player.team_name || 'Free agent'}</div>
+              <h2 className="app-title">{selected.player.full_name}</h2>
+              <p className="mt-2 text-sm text-slate-300">Latest season summary with key shooting and per-game stats.</p>
             </div>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <StatCard label="PPG" value={selected.stats.latest_season.ppg.toFixed(1)} />

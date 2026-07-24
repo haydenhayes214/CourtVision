@@ -78,7 +78,7 @@ export default function PlayerDropdown({ label, placeholder = 'Search player', o
   return (
     <div className={`relative ${className}`}>
       {label && (
-        <label htmlFor={inputId} className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-700">
+        <label htmlFor={inputId} className="app-eyebrow">
           {label}
         </label>
       )}
@@ -94,7 +94,7 @@ export default function PlayerDropdown({ label, placeholder = 'Search player', o
           role="combobox"
           aria-expanded={open}
           aria-controls={`${inputId}-menu`}
-          className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 pr-12 text-slate-950 outline-none transition placeholder:text-slate-500 focus:border-teal-700 focus:ring-4 focus:ring-teal-100"
+          className="w-full rounded-lg border border-white/10 bg-[#070d19] px-4 py-3 pr-12 text-white outline-none transition placeholder:text-slate-500 focus:border-teal-300 focus:ring-4 focus:ring-teal-400/10"
         />
         <button
           type="button"
@@ -106,14 +106,14 @@ export default function PlayerDropdown({ label, placeholder = 'Search player', o
               setOpen((current) => !current)
             }
           }}
-          className="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-md border border-slate-300 bg-slate-950 text-white transition hover:border-teal-700 hover:bg-teal-700"
+          className="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-md border border-teal-300/30 bg-teal-400 text-slate-950 transition hover:bg-amber-300"
         >
           +
         </button>
       </div>
 
       {helperText && (
-        <div className={`mt-2 text-sm ${error ? 'text-rose-600' : 'text-slate-500'}`}>
+        <div className={`mt-2 text-sm ${error ? 'text-rose-300' : 'text-slate-400'}`}>
           {helperText}
         </div>
       )}
@@ -122,7 +122,7 @@ export default function PlayerDropdown({ label, placeholder = 'Search player', o
         <div
           id={`${inputId}-menu`}
           role="listbox"
-          className="absolute left-0 right-0 z-30 mt-2 max-h-72 overflow-auto rounded-lg border border-slate-300 bg-white shadow-xl"
+          className="absolute left-0 right-0 z-30 mt-2 max-h-72 overflow-auto rounded-lg border border-white/10 bg-[#0b1220] shadow-2xl shadow-black/40"
         >
           {results.map((player) => (
             <button
@@ -130,10 +130,10 @@ export default function PlayerDropdown({ label, placeholder = 'Search player', o
               type="button"
               role="option"
               onClick={() => handleSelect(player)}
-              className="w-full px-4 py-3 text-left text-slate-700 transition hover:bg-teal-50"
+              className="w-full px-4 py-3 text-left text-slate-300 transition hover:bg-teal-300/10"
             >
-              <div className="font-semibold text-slate-950">{player.full_name}</div>
-              <div className="text-sm text-slate-500">
+              <div className="font-semibold text-white">{player.full_name}</div>
+              <div className="text-sm text-slate-400">
                 {player.team_name || 'Free agent'}
                 {detail === 'position' && ` - ${player.position || 'Position N/A'}`}
               </div>

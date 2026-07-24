@@ -16,9 +16,9 @@ export default function App() {
   const active = pages.find((page) => page.id === activePage)
 
   return (
-    <div className="min-h-screen bg-[#edf2f7] text-slate-950">
+    <div className="min-h-screen bg-[#050914] text-slate-100">
       <div className="mx-auto grid min-h-screen max-w-7xl gap-6 px-4 py-4 sm:px-6 lg:grid-cols-[260px_1fr] lg:px-8">
-        <aside className="flex flex-col gap-5 border-[#102033] bg-[#08111f] p-4 shadow-xl shadow-slate-900/10 sm:rounded-lg sm:border lg:sticky lg:top-4 lg:h-[calc(100vh-2rem)]">
+        <aside className="flex flex-col gap-5 border-white/10 bg-[#080f1d] p-4 shadow-2xl shadow-black/30 sm:rounded-lg sm:border lg:sticky lg:top-4 lg:h-[calc(100vh-2rem)]">
           <div className="border-b border-white/10 pb-5">
             <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-amber-400 text-sm font-bold text-slate-950">CV</div>
             <div className="mt-4 text-lg font-semibold text-white">CourtVision</div>
@@ -32,8 +32,8 @@ export default function App() {
                 onClick={() => setActivePage(page.id)}
                 className={`group rounded-lg border px-3 py-3 text-left transition ${
                   activePage === page.id
-                    ? 'border-amber-300 bg-amber-400 text-slate-950 shadow-sm shadow-amber-400/20'
-                    : 'border-transparent bg-transparent text-slate-300 hover:border-white/15 hover:bg-white/10 hover:text-white'
+                    ? 'border-amber-300 bg-amber-400 text-slate-950 shadow-sm shadow-amber-400/25'
+                    : 'border-transparent bg-transparent text-slate-300 hover:border-teal-300/30 hover:bg-teal-300/10 hover:text-white'
                 }`}
               >
                 <span className="block text-sm font-semibold">{page.label}</span>
@@ -52,13 +52,13 @@ export default function App() {
         </aside>
 
         <div className="flex min-w-0 flex-col gap-5">
-          <header className="border-b border-slate-300 bg-[#edf2f7] py-4 lg:sticky lg:top-0 lg:z-20">
+          <header className="border-b border-white/10 bg-[#050914]/95 py-4 backdrop-blur lg:sticky lg:top-0 lg:z-20">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <p className="text-sm font-semibold text-teal-700">{active?.kicker}</p>
-                <h1 className="mt-1 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">{active?.label}</h1>
+                <p className="text-sm font-semibold text-teal-300">{active?.kicker}</p>
+                <h1 className="mt-1 text-3xl font-semibold tracking-tight text-white sm:text-4xl">{active?.label}</h1>
               </div>
-              <div className="rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm">
+              <div className="rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-slate-300 shadow-sm">
                 Search, compare, trend, and match player profiles.
               </div>
             </div>
